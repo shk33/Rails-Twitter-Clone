@@ -5,7 +5,13 @@
       <ul class="nav navbar-nav pull-right">
         <li><%= link_to "Home",   root_path %></li>
         <li><%= link_to "Help",   help_path %></li>
-        <li><%= link_to "Log in", login_path %></li>
+        
+        <% if logged_in? %>
+          <%= render 'layouts/logged_in/header' %>
+        <% else %>
+          <%= render 'layouts/logged_out/header' %>
+        <% end %>
+
       </ul>
     </nav>
   </div>
