@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   has_secure_password
 
   #Attr Accessors
-  attr_accessor :remember_token, :activation_token
+  attr_accessor :remember_token, :activation_token, :reset_token
 
   # Returns the hash digest of the given string.
   def User.digest string
@@ -48,14 +48,34 @@ class User < ActiveRecord::Base
     BCrypt::Password.new(digest).is_password?(token)
   end
 
+  #Activates the user account
   def activate
     update_attribute :activated,    true
     update_attribute :activated_at, Time.zone.now
   end
 
+  #Sends an activation email for the user account
   def send_activation_email
     UserMailer.account_activation(self).deliver
   end
+
+  #Create a reset digest and its token for password reset
+  def create_reset_digest
+    self.reset_token = User.new_token
+    update_attribute :reset_digest,  User.digest(reset_token)
+    update_attribute :reset_sent_at, Time.zone.now
+  end
+
+  # #Sends an email for reset the user password
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver
+  end
+
+  # Returns true if a password reset has expired.
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago
+  end
+
 
   private
     def downcase_email
