@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   #Asociations
-  has_many :microposts
+  has_many :microposts, dependent: :destroy
 
   #Callbacks
   before_save   :downcase_email
