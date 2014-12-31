@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   #Users Password Resets
   resources :password_resets, only: [:new, :create, :edit, :update]
 
+  #Microposts
+  resources :microposts, only: [:create, :destroy]
+  
   #Sessions
   get    'login'  => 'sessions#new'
   post   'login'  => 'sessions#create'
