@@ -8,7 +8,14 @@ Rails.application.routes.draw do
   
   #Users
   get  'signup'  => 'users#new'
-  resources :users
+  resources :users do
+    member do
+      get :following, :followers
+    end
+  end
+
+  #Users Relationsships
+  resources :relationships, only: [:create, :destroy]
 
   #Users Password Resets
   resources :password_resets, only: [:new, :create, :edit, :update]
